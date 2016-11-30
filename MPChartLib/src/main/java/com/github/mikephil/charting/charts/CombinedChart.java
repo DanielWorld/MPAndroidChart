@@ -42,6 +42,18 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
      */
     private boolean mDrawBarShadow = false;
 
+    /**
+     * 만약 true 로 설정될 경우, chart bar 의 top 부분이 지정된 radius 만큼 그린다.
+     * <p>{@link android.os.Build.VERSION_CODES#LOLLIPOP} 이상만 적용 가능</p>
+     */
+    private boolean mDrawBarTopRoundEnable = false;
+
+    /**
+     * {@link BarChart#isDrawBarTopRoundEnabled()} 일 경우 chart bar 의 top 부분을 해당 radius 만큼
+     * 둥글게 처리한다.
+     */
+    private float mTopRoundRadius;
+
     protected DrawOrder[] mDrawOrder;
 
     /**
@@ -202,6 +214,38 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
     @Override
     public boolean isHighlightFullBarEnabled() {
         return mHighlightFullBarEnabled;
+    }
+
+    /**
+     * chart bar 의 top 부분을 round 처리를 할 것인지 여부 처리 <br>
+     *     {@link android.os.Build.VERSION_CODES#LOLLIPOP} 이상 버전에서만 적용 가능
+     * @param enabled
+     * @param radius 반드시 0 보다 큰 유효값이 와야함. 안그러면 {@link IllegalArgumentException} 에러 발생
+     *               또한, 비상적으로 큰 값이 올 경우 적용이 안될 수 있음.
+     */
+    public void setDrawBarTopRoundEnable(boolean enabled, float radius) {
+        if (radius <= 0) throw new IllegalArgumentException("top round radius should be larger than 0");
+
+        mDrawBarTopRoundEnable = enabled;
+        mTopRoundRadius = radius;
+    }
+
+    /**
+     * @return true 일 경우, chart bar 의 top 부분은 round 처리가 된다. 롤리팝 미만 기기는 적용 안됨.
+     */
+    @Override
+    public boolean isDrawBarTopRoundEnabled() {
+        return mDrawBarTopRoundEnable;
+    }
+
+    /**
+     * char bar top 부분 radius
+     * <p>{@link BarChart#isDrawBarTopRoundEnabled()} true 의 경우, 해당 radius 값 가져오기</p>
+     * @return
+     */
+    @Override
+    public float getDrawBarTopRoundRadius() {
+        return mTopRoundRadius;
     }
 
     /**

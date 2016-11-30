@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Build;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.buffer.BarBuffer;
@@ -161,12 +162,37 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
                 mRenderPaint.setColor(dataSet.getColor(j / 4));
             }
 
-            c.drawRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
-                    buffer.buffer[j + 3], mRenderPaint);
+            if (mChart.isDrawBarTopRoundEnabled() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                    && buffer.buffer[j + 1] + mChart.getDrawBarTopRoundRadius() < buffer.buffer[j + 3]) {
+
+                final float drawBarTopRoundRadius = mChart.getDrawBarTopRoundRadius();
+
+                c.drawRoundRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
+                        buffer.buffer[j + 3], drawBarTopRoundRadius, drawBarTopRoundRadius, mRenderPaint);
+                c.drawRect(buffer.buffer[j], buffer.buffer[j + 1] + drawBarTopRoundRadius, buffer.buffer[j + 2],
+                        buffer.buffer[j + 3], mRenderPaint);
+            }
+            else {
+                c.drawRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
+                        buffer.buffer[j + 3], mRenderPaint);
+            }
 
             if (drawBorder) {
-                c.drawRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
-                        buffer.buffer[j + 3], mBarBorderPaint);
+                if (mChart.isDrawBarTopRoundEnabled() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                        && buffer.buffer[j + 1] + mChart.getDrawBarTopRoundRadius() < buffer.buffer[j + 3]) {
+
+                    final float drawBarTopRoundRadius = mChart.getDrawBarTopRoundRadius();
+
+                    c.drawRoundRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
+                            buffer.buffer[j + 3], drawBarTopRoundRadius, drawBarTopRoundRadius, mBarBorderPaint);
+                    c.drawRect(buffer.buffer[j], buffer.buffer[j + 1] + drawBarTopRoundRadius, buffer.buffer[j + 2],
+                            buffer.buffer[j + 3], mBarBorderPaint);
+                }
+                else {
+                    c.drawRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
+                            buffer.buffer[j + 3], mBarBorderPaint);
+                }
+
             }
         }
     }
