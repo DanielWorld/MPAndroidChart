@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.DANIEL;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -19,9 +20,11 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.xxmassdeveloper.mpchartexample.custom.DayAxisValueFormatter2;
 import com.xxmassdeveloper.mpchartexample.custom.MonthAxisValueFormatter;
 import com.xxmassdeveloper.mpchartexample.custom.MyMarkerView;
@@ -37,8 +40,6 @@ import java.util.Random;
 
 public class BarChartActivityMultiDataset2 extends DemoBase implements
         OnChartValueSelectedListener, View.OnClickListener {
-
-    private final String TAG = "OKAY";
 
     enum GraphType {
         Days, Months
@@ -68,6 +69,8 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         // scaling can now only be done on x- and y-axis separately
         mChart.setPinchZoom(false);
 
+        // Daniel (2016-11-29 15:46:23): X 방향으로는 차트 scale 불가능 하도록 처리
+        mChart.setScaleXEnabled(false);
         // Daniel (2016-11-26 21:32:11): Y 방향으로는 차트 scale 불가능 하도록 처리
         mChart.setScaleYEnabled(false);
 
@@ -82,7 +85,7 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
 
         // Daniel (2016-11-26 21:36:24): 보여줄 최대 차트 value 값 정하기
         // 만약 차트 value 가 지정한 값 이상일 경우, value 를 보여주지 않음
-        mChart.setMaxVisibleValueCount(-1);
+//        mChart.setMaxVisibleValueCount();
 
         mChart.setDrawGridBackground(false);
 
@@ -93,13 +96,14 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         mChart.getAxisRight().setEnabled(false);
         mChart.getAxisLeft().setEnabled(true);
 
+        // Daniel (2016-11-29 18:40:43): 차트 top 부분 round 하게 처리, radius 는 10.0f
+        mChart.setDrawBarTopRoundEnable(true, 10f);
+
         // create a custom MarkerView (extend MarkerView) and specify the layout
         // to use for it
-        MyMarkerView mv = new MyMarkerView(this, R.layout.custom_marker_view);
-        mv.setChartView(mChart); // For bounds control
-        mChart.setMarker(mv); // Set the marker to the chart
-
-
+//        MyMarkerView mv = new MyMarkerView(this, R.layout.custom_marker_view);
+//        mv.setChartView(mChart); // For bounds control
+//        mChart.setMarker(mv); // Set the marker to the chart
 
         final Random r = new Random();
 
@@ -113,7 +117,7 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
                 setXAxisField(count, mCurrentGraphType);
                 setYAxisField(mCurrentGraphType);
                 updateDayData(count);
-                h.postDelayed(this, 5000);
+                h.postDelayed(this, 10000);
             }
         }, 1);
     }
@@ -207,6 +211,12 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         xAxis.setLabelCount(labelCount);
         xAxis.setValueFormatter(xAxisFormatter);
         xAxis.setCenterAxisLabels(true);
+
+        xAxis.setDrawGridLines(true);  // x축 grid 선 긋기
+        xAxis.setGridColor(getResources().getColor(android.R.color.holo_green_dark));   // grid 선 x축 색깔
+        xAxis.setGridLineWidth(3f);
+        xAxis.setAxisLineColor(getResources().getColor(android.R.color.holo_purple));   // Axis 선 x축 색깔
+        xAxis.setAxisLineWidth(3f);
     }
 
     /**
@@ -217,7 +227,8 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(mTfLight);
 //        leftAxis.setValueFormatter(new LargeValueFormatter());
-        leftAxis.setSpaceTop(0f);
+        // Daniel (2016-11-29 17:22:41): 위 chart bar 위에 값을 표시하기 위한 최소 공간이 존재해야 한다.
+        leftAxis.setSpaceTop(5f);
         // Daniel (2016-11-27 12:34:30): 최소 0.1부터 시작
         leftAxis.setAxisMinimum(0.1f); // this replaces setStartAtZero(true)
 
@@ -226,11 +237,11 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         else
             leftAxis.setLabelCount(3);
 
-        leftAxis.setDrawGridLines(true);    // grid 선 긋기
-        leftAxis.setGridColor(getResources().getColor(android.R.color.holo_red_dark));  // grid 선 색깔
-        leftAxis.setGridLineWidth(1.0f);     // grid 선 굵기 (dp)
-
-        leftAxis.setAxisLineColor(getResources().getColor(android.R.color.holo_orange_dark));    // Axis 선 색깔
+        leftAxis.setDrawGridLines(true);    // y축 grid 선 긋기
+        leftAxis.setGridColor(getResources().getColor(android.R.color.holo_red_dark));  // grid 선 y축 색깔
+        leftAxis.setGridLineWidth(3f);
+        leftAxis.setAxisLineColor(getResources().getColor(android.R.color.holo_orange_dark));    // Axis 선 y축 색깔
+        leftAxis.setAxisLineWidth(3f);
     }
 
     /**
@@ -256,10 +267,10 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         int randomInt = 0;
 
         for (int i = startDay; i < endDay; i++) {
-            randomInt = r.nextInt(4);
-            yVals1.add(new BarEntry(i, randomInt * 7));
-            randomInt = r.nextInt(4);
-            yVals2.add(new BarEntry(i, randomInt * 5));
+            randomInt = r.nextInt(25);
+            yVals1.add(new BarEntry(i, randomInt * 3));
+            randomInt = r.nextInt(25);
+            yVals2.add(new BarEntry(i, randomInt * 3));
         }
 
         BarDataSet set1, set2;
@@ -276,9 +287,23 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         } else {
             // create 2 DataSets
             set1 = new BarDataSet(yVals1, null);
-            set1.setColor(getResources().getColor(android.R.color.background_dark));
+            set1.setColor(getResources().getColor(android.R.color.holo_green_dark));
+            set1.setValueTextSize(10f);        // bar 에 표시되는 value size
+            // Daniel (2016-11-29 17:30:19): bar 에 표시되는 value 형식
+            set1.setValueFormatter(new IValueFormatter() {
+                @Override
+                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                    return String.valueOf((int) value);
+                }
+            });
+            // Daniel (2016-11-29 17:30:36): bar 에 표시되는 value color
+            set1.setValueTextColor(getResources().getColor(android.R.color.holo_blue_dark));
+            // Daniel (2016-11-29 18:25:09): bar 에 표시되는 highlight color
+            set1.setHighLightColor(getResources().getColor(android.R.color.holo_red_light));
+            set1.setHighLightAlpha(255);  // bar 에 표시되는 highlight alpha
+
             set2 = new BarDataSet(yVals2, null);
-            set2.setColor(Color.rgb(164, 228, 251));
+            set2.setColor(getResources().getColor(android.R.color.holo_purple));
 
             BarData data = new BarData(set1, set2);
 //            data.setValueFormatter(new LargeValueFormatter());
@@ -305,12 +330,12 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
 
     @Override
     public void onValueSelected(Entry e, Highlight h) {
-        Log.d(TAG, "Selected: " + e.toString() + ", dataSet: " + h.getDataSetIndex());
+        DANIEL.log().d("Selected index : " + h.getDataSetIndex() + ", Y 값 : " + (int) e.getY());
     }
 
     @Override
     public void onNothingSelected() {
-        Log.d(TAG, "Nothing selected.");
+        DANIEL.log().d("Nothing selected.");
     }
 
     @Override

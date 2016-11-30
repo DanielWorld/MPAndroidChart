@@ -9,6 +9,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 
+import com.github.mikephil.charting.DANIEL;
 import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
@@ -119,6 +120,8 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
             case MotionEvent.ACTION_DOWN:
+
+                DANIEL.log().d("Action down");
 
                 startAction(event);
 
