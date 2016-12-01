@@ -237,6 +237,14 @@ public abstract class AxisBase extends ComponentBase {
     }
 
     /**
+     * Axis 선 width 설정 (단위 px)
+     * @param width
+     */
+    public void setAxisLineWidthInPixel(float width) {
+        if (width > 0) mAxisLineWidth = width;
+    }
+
+    /**
      * Returns the width of the axis line (line alongside the axis).
      *
      * @return
@@ -253,6 +261,14 @@ public abstract class AxisBase extends ComponentBase {
      */
     public void setGridLineWidth(float width) {
         mGridLineWidth = Utils.convertDpToPixel(width);
+    }
+
+    /**
+     * Grid 선 width 설정 (단위 px)
+     * @param width
+     */
+    public void setGridLineWidthInPixel(float width) {
+        if (width > 0) mGridLineWidth = width;
     }
 
     /**

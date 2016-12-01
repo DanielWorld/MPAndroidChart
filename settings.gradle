@@ -1,4 +1,4 @@
-include 'MPChartLib'
+include 'MPChartLib', ':joda-time-2.1'
 //include 'MPAndroidChart-Realm'
 include 'MPChartExample'
 //include ':MPChartLib-Realm'

@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
 
+import com.github.mikephil.charting.DANIEL;
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.buffer.BarBuffer;
 import com.github.mikephil.charting.data.BarData;
@@ -222,6 +223,7 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
             float negOffset = 0f;
             boolean drawValueAboveBar = mChart.isDrawValueAboveBarEnabled();
 
+            // Daniel (2016-11-30 15:14:49): BarData set 에 따라서 value 를 그려내야 함.
             for (int i = 0; i < mChart.getBarData().getDataSetCount(); i++) {
 
                 IBarDataSet dataSet = dataSets.get(i);
@@ -252,8 +254,13 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
 
                 // if only single values are drawn (sum)
                 if (!dataSet.isStacked()) {
-
                     for (int j = 0; j < buffer.buffer.length * mAnimator.getPhaseX(); j += 4) {
+
+                        // Daniel (2016-11-30 16:58:46): highlight 된 부분만 draw value 처리 여부 flag 체크
+                        if (mChart.isHighlightOnlyDrawValueEnabled()) {
+                            if (j < mChart.getHighlightOnlyDrawValueFirstIndex() * 4) continue;
+                            if (j > mChart.getHighlightOnlyDrawValueLastIndex() * 4) continue;
+                        }
 
                         float x = (buffer.buffer[j] + buffer.buffer[j + 2]) / 2f;
 
@@ -274,7 +281,6 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
 
                     // if we have stacks
                 } else {
-
                     Transformer trans = mChart.getTransformer(dataSet.getAxisDependency());
 
                     int bufferIndex = 0;

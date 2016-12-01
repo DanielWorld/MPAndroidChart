@@ -76,4 +76,9 @@ public class RadarHighlighter extends PieRadarHighlighter<RadarChart> {
 
         return mHighlightBuffer;
     }
+
+    @Override
+    public List<Highlight> getHighlight(int xVal, float x, float y) {
+        return null;
+    }
 }

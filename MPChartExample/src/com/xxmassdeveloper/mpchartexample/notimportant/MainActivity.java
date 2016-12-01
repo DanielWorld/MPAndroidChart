@@ -17,6 +17,7 @@ import com.github.mikephil.charting.utils.Utils;
 import com.xxmassdeveloper.mpchartexample.AnotherBarActivity;
 import com.xxmassdeveloper.mpchartexample.BarChartActivity;
 import com.xxmassdeveloper.mpchartexample.BarChartActivityMultiDataset;
+import com.xxmassdeveloper.mpchartexample.BarChartActivityMultiDataset2;
 import com.xxmassdeveloper.mpchartexample.BarChartActivitySinus;
 import com.xxmassdeveloper.mpchartexample.BarChartPositiveNegative;
 import com.xxmassdeveloper.mpchartexample.BubbleChartActivity;
@@ -65,7 +66,6 @@ public class MainActivity extends Activity implements OnItemClickListener {
         Utils.init(this);
 
         ArrayList<ContentItem> objects = new ArrayList<ContentItem>();
-
         objects.add(new ContentItem("Line Chart", "A simple demonstration of the linechart."));
         objects.add(new ContentItem("Line Chart (Dual YAxis)",
                 "Demonstration of the linechart with dual y-axis."));
@@ -147,6 +147,8 @@ public class MainActivity extends Activity implements OnItemClickListener {
         objects.add(new ContentItem(
                 "Half PieChart",
                 "This demonstrates how to create a 180 degree PieChart."));
+
+        objects.add(new ContentItem("바풀 custom chart", "custom 용"));
 
         MyAdapter adapter = new MyAdapter(this, objects);
 
@@ -288,6 +290,10 @@ public class MainActivity extends Activity implements OnItemClickListener {
                 break;
             case 31:
                 i = new Intent(this, HalfPieChartActivity.class);
+                startActivity(i);
+                break;
+            case 32:
+                i = new Intent(this, BarChartActivityMultiDataset2.class);
                 startActivity(i);
                 break;
 

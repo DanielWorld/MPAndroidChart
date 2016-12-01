@@ -21,6 +21,9 @@ import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * TouchListener for Bar-, Line-, Scatter- and CandleStickChart with handles all
  * touch interaction. Longpress == Zoom out. Double-Tap == Zoom in.
@@ -55,6 +58,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
     private float mSavedDist = 1f;
 
     private IDataSet mClosestDataSetToTouch;
+    private Entry mClosestEntryToTouch;
 
     /**
      * used for tracking velocity of dragging
@@ -203,6 +207,8 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
 
             case MotionEvent.ACTION_UP:
 
+                DANIEL.log().d("Action up");
+
                 final VelocityTracker velocityTracker = mVelocityTracker;
                 final int pointerId = event.getPointerId(0);
                 velocityTracker.computeCurrentVelocity(1000, Utils.getMaximumFlingVelocity());
@@ -288,6 +294,11 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         mTouchStartPoint.y = event.getY();
 
         mClosestDataSetToTouch = mChart.getDataSetByTouchPoint(event.getX(), event.getY());
+
+        mClosestEntryToTouch = mChart.getEntryByTouchPoint(event.getX(), event.getY());
+
+        DANIEL.log().d("터치한 entry 의 x값 : " + mClosestEntryToTouch.getX());
+        DANIEL.log().d("터치한 entry 의 y값 : " + mClosestEntryToTouch.getY());
     }
 
     /**
@@ -556,6 +567,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
 
     @Override
     public boolean onDoubleTap(MotionEvent e) {
+        DANIEL.log().d("onDoubleTap()");
 
         mLastGesture = ChartGesture.DOUBLE_TAP;
 
@@ -584,6 +596,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
 
     @Override
     public void onLongPress(MotionEvent e) {
+        DANIEL.log().d("onLongPress()");
 
         mLastGesture = ChartGesture.LONG_PRESS;
 
@@ -597,6 +610,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
+        DANIEL.log().d("onSingleTapUp()");
 
         mLastGesture = ChartGesture.SINGLE_TAP;
 
@@ -610,8 +624,14 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
             return false;
         }
 
-        Highlight h = mChart.getHighlightByTouchPoint(e.getX(), e.getY());
-        performHighlight(h, e);
+        if (mChart.isHighlightXvalueGroup()
+                && mClosestDataSetToTouch != null) {
+            List<Highlight> hList = mChart.getHighlightByXvalue((int) mClosestEntryToTouch.getX(), e.getX(), e.getY());
+            performHighlightList(hList, e);
+        } else {
+            Highlight h = mChart.getHighlightByTouchPoint(e.getX(), e.getY());
+            performHighlight(h, e);
+        }
 
         return super.onSingleTapUp(e);
     }

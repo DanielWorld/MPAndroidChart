@@ -43,10 +43,16 @@ public class BarChart extends BarLineChartBase<BarData> implements BarDataProvid
     private boolean mDrawBarTopRoundEnable = false;
 
     /**
-     * {@link BarChart#isDrawBarTopRoundEnabled()} 일 경우 chart bar 의 top 부분을 해당 radius 만큼
+     * {@link BarChart#isDrawBarTopRoundEnabled()} true 일 경우 chart bar 의 top 부분을 해당 radius 만큼
      * 둥글게 처리한다.
      */
     private float mTopRoundRadius;
+
+    /**
+     * {@link BarChart#isHighlightOnlyDrawValueEnabled()} true 일 경우, 유저가 highlight 시도시
+     * 해당 highlight 된 chart 만 value 를 그려낸다.
+     */
+    private boolean mHighlightOnlyDrawValueEnable = false;
 
     private boolean mFitBars = false;
 
@@ -250,6 +256,34 @@ public class BarChart extends BarLineChartBase<BarData> implements BarDataProvid
     @Override
     public float getDrawBarTopRoundRadius() {
         return mTopRoundRadius;
+    }
+
+    /**
+     * 유저가 highlight 시도할 때, 해당 highlight 된 부분만 value 를 draw 할 것인지 여부
+     * @param enabled
+     */
+    public void setHighlightOnlyDrawValueEnable(boolean enabled) {
+        mHighlightOnlyDrawValueEnable = enabled;
+    }
+
+    /**
+     * 유저가 highlight 시도할 때, 해당 highlight 된 chart 만 value 를 그려내는지 여부.
+     * <p>highlight 된 chart 만 value 를 그려낼 경우, highlight 안된 chart 들은 자동으로 value 를 숨긴다.</p>
+     * @return
+     */
+    @Override
+    public boolean isHighlightOnlyDrawValueEnabled() {
+        return mHighlightOnlyDrawValueEnable;
+    }
+
+    @Override
+    public int getHighlightOnlyDrawValueFirstIndex() {
+        return Chart.highlightOnlyDrawValueFirstIndex;
+    }
+
+    @Override
+    public int getHighlightOnlyDrawValueLastIndex() {
+        return Chart.highlightOnlyDrawValueLastIndex;
     }
 
     /**

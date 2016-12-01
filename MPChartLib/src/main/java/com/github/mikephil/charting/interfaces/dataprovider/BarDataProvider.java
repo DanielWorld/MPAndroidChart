@@ -25,4 +25,25 @@ public interface BarDataProvider extends BarLineScatterCandleBubbleDataProvider 
      * @return
      */
     float getDrawBarTopRoundRadius();
+
+    /**
+     * Highlight 된 부분만 value 를 그려내는지 여부
+     * <p>Highlight enable 이 되어 있어야 동작을 한다.</p>
+     * @return
+     */
+    boolean isHighlightOnlyDrawValueEnabled();
+
+    /**
+     * {@link BarDataProvider#isHighlightOnlyDrawValueEnabled()} 가 true 일 경우 동작하며
+     * highlight 시 유저가 그릴 first 차트 index 를 표시해준다.
+     * @return
+     */
+    int getHighlightOnlyDrawValueFirstIndex();
+
+    /**
+     * {@link BarDataProvider#isHighlightOnlyDrawValueEnabled()} 가 true 일 경우 동작하며
+     * highlight 시 유저가 그릴 last 차트 index 를 표시해준다.
+     * @return
+     */
+    int getHighlightOnlyDrawValueLastIndex();
 }

@@ -1,5 +1,6 @@
 package com.github.mikephil.charting.highlight;
 
+import com.github.mikephil.charting.DANIEL;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
 import com.github.mikephil.charting.data.DataSet;
@@ -40,6 +41,17 @@ public class ChartHighlighter<T extends BarLineScatterCandleBubbleDataProvider> 
 
         Highlight high = getHighlightForX(xVal, x, y);
         return high;
+    }
+
+    @Override
+    public List<Highlight> getHighlight(int xVal, float x, float y) {
+        MPPointD pos = getValsForTouch(x, y);
+//        float xVal = (float) pos.x;
+        MPPointD.recycleInstance(pos);
+
+        DANIEL.log().d("CharHighlighter.class | x pos : " + pos.x);
+        DANIEL.log().d("CharHighlighter.class | " + " xVal: " + xVal + ", x: " + x + ", y: " + y);
+        return getHighlightAtXValueForGroup((int) pos.x, x, y);
     }
 
     /**
@@ -143,6 +155,37 @@ public class ChartHighlighter<T extends BarLineScatterCandleBubbleDataProvider> 
                 continue;
 
             mHighlightBuffer.addAll(buildHighlights(dataSet, i, xVal, DataSet.Rounding.CLOSEST));
+        }
+
+        return mHighlightBuffer;
+    }
+
+    /**
+     * {@link ChartHighlighter#getHighlightsAtXValue(float, float, float)} 와 동일하나
+     * 단, x-value 의 highlight 구할시 Rounding UP 처리
+     * @param xVal
+     * @param x
+     * @param Y
+     * @return
+     */
+    protected List<Highlight> getHighlightAtXValueForGroup(float xVal, float x, float Y) {
+
+        mHighlightBuffer.clear();
+
+        BarLineScatterCandleBubbleData data = getData();
+
+        if (data == null)
+            return mHighlightBuffer;
+
+        for (int i = 0, dataSetCount = data.getDataSetCount(); i < dataSetCount; i++) {
+
+            IDataSet dataSet = data.getDataSetByIndex(i);
+
+            // don't include DataSets that cannot be highlighted
+            if (!dataSet.isHighlightEnabled())
+                continue;
+
+            mHighlightBuffer.addAll(buildHighlights(dataSet, i, xVal, DataSet.Rounding.UP));
         }
 
         return mHighlightBuffer;

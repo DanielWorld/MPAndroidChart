@@ -248,6 +248,26 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
         return mTopRoundRadius;
     }
 
+    @Override
+    public boolean isHighlightXvalueGroup() {
+        return false;
+    }
+
+    @Override
+    public boolean isHighlightOnlyDrawValueEnabled() {
+        return false;
+    }
+
+    @Override
+    public int getHighlightOnlyDrawValueFirstIndex() {
+        return 0;
+    }
+
+    @Override
+    public int getHighlightOnlyDrawValueLastIndex() {
+        return 0;
+    }
+
     /**
      * Returns the currently set draw order.
      *

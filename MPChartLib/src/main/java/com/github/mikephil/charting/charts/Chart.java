@@ -54,6 +54,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Baseclass of all Chart-Views.
@@ -82,6 +83,13 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Flag that indicates if highlighting per tap (touch) is enabled
      */
     protected boolean mHighLightPerTapEnabled = true;
+
+
+    /**
+     * {@link BarChart#isHighlightXvalueGroup()} true 일 경우, 유저가 highlight 시도시 유사한 x-value 의
+     * 그룹을 전부 highlight 시도한다.
+     */
+    private boolean mHighlightXvalueGroup;
 
     /**
      * If set to true, chart continues to scroll after touch up
@@ -506,6 +514,38 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     }
 
     /**
+     * 유저가 highlight 시도시 x-value 와 유사한 그룹 전체를 highlight 할 것인지 여부
+     * @param enabled
+     */
+    public void setHighlightXvalueGroupEnable(boolean enabled) {
+        mHighlightXvalueGroup = enabled;
+    }
+
+    /**
+     * 유저가 highlight 시도할 때, x-value 와 유사한 그룹 전체를 highlight 할 것인지 여부
+     * <p>{@link BarChart#isHighlightPerTapEnabled()} 등 highlight 가 enabled 되어있어야 해요!</p>
+     * @return
+     */
+    public boolean isHighlightXvalueGroup() {
+        return mHighlightXvalueGroup;
+    }
+
+    public static int highlightOnlyDrawValueFirstIndex = -1;
+    public static int highlightOnlyDrawValueLastIndex = -1;
+
+    /**
+     * <p>해당 method 사용금지!!! </p>
+     * {@link BarChart#isHighlightOnlyDrawValueEnabled()} true 일 때만 적용되며,
+     * 해당 chart 가 highlight 된 부분만 draw 를 할 때, highlight 된 부분 index 를 제공
+     * @param firstIndex
+     * @param lastIndex
+     */
+    public void setHighlightOnlyDrawValueIndex(int firstIndex, int lastIndex) {
+        highlightOnlyDrawValueFirstIndex = firstIndex;
+        highlightOnlyDrawValueLastIndex = lastIndex;
+    }
+
+    /**
      * Returns true if there are values to highlight, false if there are no
      * values to highlight. Checks if the highlight array is null, has a length
      * of zero or if the first object is null.
@@ -676,6 +716,14 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
             return null;
         } else
             return getHighlighter().getHighlight(x, y);
+    }
+
+    public List<Highlight> getHighlightByXvalue(int xVal, float x, float y) {
+        if (mData == null) {
+            Log.e(LOG_TAG, "Can't select by touch. No data set.");
+            return null;
+        } else
+            return getHighlighter().getHighlight(xVal, x, y);
     }
 
     /**
