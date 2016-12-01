@@ -173,6 +173,13 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
                 c.drawRect(buffer.buffer[j], buffer.buffer[j + 1] + drawBarTopRoundRadius, buffer.buffer[j + 2],
                         buffer.buffer[j + 3], mRenderPaint);
             }
+            //======================================================================================================================================
+            else if (buffer.buffer[j + 1] == buffer.buffer[j + 3]) {
+                // Daniel (2016-12-01 14:13:33): 미안하지만 top 과 bottom 이 동일하다면 사실상 y값 0이나 다름이 없음. 2 ~ 3px 정도 그려줘야 함.. 그럴필요 없다면 이 부분 block 코멘트 처리
+                c.drawRect(buffer.buffer[j], (buffer.buffer[j + 1] - 2), buffer.buffer[j + 2],
+                        buffer.buffer[j + 3], mRenderPaint);
+            }
+            //======================================================================================================================================
             else {
                 c.drawRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
                         buffer.buffer[j + 3], mRenderPaint);

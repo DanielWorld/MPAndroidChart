@@ -15,7 +15,9 @@ public abstract class AbstractBuffer<T> {
     /** index in the buffer */
     protected int index = 0;
 
-    /** float-buffer that holds the data points to draw, order: x,y,x,y,... */
+    /** float-buffer that holds the data points to draw, order: x,y,x,y,...
+     * <p>[left, top, right, bottom]</p>
+     */
     public final float[] buffer;
 
     /** animation phase x-axis */
