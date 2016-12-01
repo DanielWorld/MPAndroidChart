@@ -249,7 +249,7 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
     }
 
     @Override
-    public boolean isHighlightXvalueGroup() {
+    public boolean isHighlightXValueGroupEnabled() {
         return false;
     }
 
@@ -265,6 +265,16 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
 
     @Override
     public int getHighlightOnlyDrawValueLastIndex() {
+        return 0;
+    }
+
+    @Override
+    public boolean isDrawXGroupBackgroundWhenHighlighted() {
+        return false;
+    }
+
+    @Override
+    public int getXGroupFieldCountWhenHighlighted() {
         return 0;
     }
 

@@ -3,6 +3,7 @@ package com.github.mikephil.charting.interfaces.dataprovider;
 import android.annotation.TargetApi;
 import android.os.Build;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.data.BarData;
 
 public interface BarDataProvider extends BarLineScatterCandleBubbleDataProvider {
@@ -46,4 +47,18 @@ public interface BarDataProvider extends BarLineScatterCandleBubbleDataProvider 
      * @return
      */
     int getHighlightOnlyDrawValueLastIndex();
+
+
+    /**
+     * {@link Chart#isHighlightXValueGroupEnabled()} 가 true 일 경우에만 동작하며, 유저가 highlight 시
+     * 해당 x Group field background 색칠하기 여부
+     * @return
+     */
+    boolean isDrawXGroupBackgroundWhenHighlighted();
+
+    /**
+     * Highlight 인 상태일 때, 해당 x-field 의 group count 를 가져오기
+     * @return
+     */
+    int getXGroupFieldCountWhenHighlighted();
 }

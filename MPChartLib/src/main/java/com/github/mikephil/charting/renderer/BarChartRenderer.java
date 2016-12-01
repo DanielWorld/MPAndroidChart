@@ -363,8 +363,42 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
 
     @Override
     public void drawHighlighted(Canvas c, Highlight[] indices) {
-
         BarData barData = mChart.getBarData();
+
+        // ====================================================================================
+        // Daniel (2016-12-01 10:10:18): 차트를 그리기 전에 먼저 뒤에 배경부터 그려야 함...
+        try {
+            if (mChart.isDrawXGroupBackgroundWhenHighlighted()) {
+                if (indices != null && indices.length > 0) {
+//            // draw the grid background
+                    Paint mGridBackgroundPaint = new Paint();
+                    mGridBackgroundPaint.setStyle(Paint.Style.FILL);
+                    // mGridBackgroundPaint.setColor(Color.WHITE);
+                    mGridBackgroundPaint.setColor(Color.rgb(240, 240, 240)); // light
+                    RectF rectF = mViewPortHandler.getContentRect();
+//
+                    IBarDataSet set = barData.getDataSetByIndex(indices[0].getDataSetIndex());
+
+                    if (set != null) {
+                        BarEntry e = set.getEntryForXValue(indices[0].getX(), indices[0].getY());
+
+                        int index = set.getEntryIndex(e);
+                        int xGroupCount = mChart.getXGroupFieldCountWhenHighlighted();
+                        float xArea = (rectF.right - rectF.left) / xGroupCount;
+                        DANIEL.log().d("index : " + index);
+                        DANIEL.log().d("xArea : " + xArea);
+
+                        float rightArea = xArea * (xGroupCount - (index + 1));  // 7은 x 그룹 수
+                        float leftArea = xArea * index;  // 7은 x 그룹 수
+//
+                        c.drawRect(rectF.left + leftArea, rectF.top, rectF.right - rightArea, rectF.bottom, mGridBackgroundPaint);
+                    }
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        // ===============================================================================================
 
         for (Highlight high : indices) {
 

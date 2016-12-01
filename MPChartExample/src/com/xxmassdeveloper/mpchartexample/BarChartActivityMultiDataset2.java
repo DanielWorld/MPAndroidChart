@@ -1,11 +1,7 @@
 package com.xxmassdeveloper.mpchartexample;
 
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,17 +24,11 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.xxmassdeveloper.mpchartexample.custom.DayAxisValueFormatter2;
 import com.xxmassdeveloper.mpchartexample.custom.MonthAxisValueFormatter;
-import com.xxmassdeveloper.mpchartexample.custom.MyMarkerView;
 import com.xxmassdeveloper.mpchartexample.notimportant.DemoBase;
 import com.xxmassdeveloper.mpchartexample.util.DateUtil;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.Random;
-import java.util.TimeZone;
 
 /**
  * Copyright (c) 2014-2016 op7773hons@gmail.com
@@ -110,15 +100,17 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
 
         // Grid background 설정 및 색상 선택
         mChart.setDrawGridBackground(true);
-        mChart.setGridBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+        mChart.setGridBackgroundColor(getResources().getColor(android.R.color.white));
 
         // Drag 시 highlight 불가능 하도록 처리
         mChart.setHighlightPerDragEnabled(false);
 
         // Highlight 처리시 group enable 처리!
-        mChart.setHighlightXvalueGroupEnable(true);
+        mChart.setHighlightXValueGroupEnable(true);
         // Highlight 된 부분만 draw 하도록 처리!
         mChart.setHighlightOnlyDrawValueEnable(true);
+        // Highlight 시 해당 x group 필드 색칠하도록 설정
+        mChart.setDrawXGroupBackgroundWhenHighlightedEnable(true);
 
         // create a custom MarkerView (extend MarkerView) and specify the layout
         // to use for it
@@ -218,7 +210,8 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         }
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTypeface(mTfLight);
+//        xAxis.setTypeface(mTfLight);
+        xAxis.setTypeface(Typeface.DEFAULT);
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f); // only intervals of 1 day
         xAxis.setLabelCount(labelCount);
@@ -232,7 +225,7 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         xAxis.setAxisLineWidthInPixel(2f);
 
         xAxis.setTextSize(10f);
-        xAxis.setTextColor(getResources().getColor(R.color.color_727272));
+        xAxis.setTextColor(getResources().getColor(R.color.color_a2a2a2));
     }
 
     /**
@@ -241,7 +234,7 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
      */
     private void setYAxisField(GraphType graphType) {
         YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.setTypeface(mTfLight);
+        leftAxis.setTypeface(Typeface.DEFAULT);
 //        leftAxis.setValueFormatter(new LargeValueFormatter());
         // Daniel (2016-11-29 17:22:41): 위 chart bar 위에 값을 표시하기 위한 최소 공간이 존재해야 한다.
         leftAxis.setSpaceTop(11f);
@@ -277,6 +270,10 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
 
         // column 은 최대 7개 (변동 가능)
         int groupCount = maxGroupCount < 1 ? 7 : maxGroupCount;
+
+        // highlight 때 사용하기 위해서는 반드시 설정을 해주세요!
+        mChart.setXGroupFieldCountWhenHighlighted(groupCount);
+
         int startDay = (int) (System.currentTimeMillis() / (1000 * 60 * 60 * 24));
         int endDay = startDay + groupCount;
 
@@ -321,8 +318,8 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
             // value type face 처리
             set1.setValueTypeface(Typeface.DEFAULT_BOLD);
             // Daniel (2016-11-29 18:25:09): bar 에 표시되는 highlight color
-            set1.setHighLightColor(getResources().getColor(android.R.color.holo_red_light));
-            set1.setHighLightAlpha(0);  // bar 에 표시되는 highlight alpha
+            set1.setHighLightColor(getResources().getColor(R.color.color_19a6f3));
+            set1.setHighLightAlpha(255);  // bar 에 표시되는 highlight alpha
 
             set2 = new BarDataSet(yVals2, null);
             set2.setColor(getResources().getColor(R.color.color_00dba2));
@@ -340,8 +337,8 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
             set2.setValueTypeface(Typeface.DEFAULT_BOLD);
 
             // Daniel (2016-11-29 18:25:09): bar 에 표시되는 highlight color
-            set2.setHighLightColor(getResources().getColor(android.R.color.holo_red_light));
-            set2.setHighLightAlpha(0);  // bar 에 표시되는 highlight alpha
+            set2.setHighLightColor(getResources().getColor(R.color.color_00dba2));
+            set2.setHighLightAlpha(255);  // bar 에 표시되는 highlight alpha
 
             BarData data = new BarData(set1, set2);
             // Daniel (2016-11-30 18:40:33): 참고로 공통으로 데이터를 처리할 수도 있다.
@@ -379,6 +376,10 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
 
         // column 은 최대 7개 (변동 가능)
         int groupCount = maxGroupCount < 1 ? 7 : maxGroupCount;
+
+        // highlight 때 사용하기 위해서는 반드시 설정을 해주세요!
+        mChart.setXGroupFieldCountWhenHighlighted(groupCount);
+
         int startMonth = DateUtil.getCurrentMonthOfYear() - groupCount + 1 + 12 * groupCount ;
         int endDay = startMonth + groupCount;
 
@@ -489,8 +490,8 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
             case R.id.dayBtn: {
                 mCurrentGraphType = GraphType.Days;
                 final Random r = new Random();
-//                int count = r.nextInt(5) + 1;
-                int count = 7;
+                int count = r.nextInt(5) + 1;
+//                int count = 7;
 
                 setXAxisField(count, mCurrentGraphType);
                 setYAxisField(mCurrentGraphType);
@@ -500,8 +501,8 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
             case R.id.monthBtn: {
                 mCurrentGraphType = GraphType.Months;
                 final Random r = new Random();
-//                int count = r.nextInt(5) + 1;
-                int count = 7;
+                int count = r.nextInt(5) + 1;
+//                int count = 7;
 
                 setXAxisField(count, mCurrentGraphType);
                 setYAxisField(mCurrentGraphType);

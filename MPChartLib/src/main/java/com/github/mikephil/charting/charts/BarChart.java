@@ -54,6 +54,17 @@ public class BarChart extends BarLineChartBase<BarData> implements BarDataProvid
      */
     private boolean mHighlightOnlyDrawValueEnable = false;
 
+    /**
+     * {@link BarChart#isDrawXGroupBackgroundWhenHighlighted()} true 일 경우, 유저가 highlight 시도시
+     * 해당 x group field background 를 색칠한다.
+     */
+    private boolean mDrawXGroupBackgroundWhenHighlighted = false;
+
+    /**
+     * X field 의 그룹 갯수
+     */
+    private int mXGroupFieldCountWhenHighlighted = 0;
+
     private boolean mFitBars = false;
 
     public BarChart(Context context) {
@@ -284,6 +295,34 @@ public class BarChart extends BarLineChartBase<BarData> implements BarDataProvid
     @Override
     public int getHighlightOnlyDrawValueLastIndex() {
         return Chart.highlightOnlyDrawValueLastIndex;
+    }
+
+    @Override
+    public boolean isDrawXGroupBackgroundWhenHighlighted() {
+        return isHighlightXValueGroupEnabled() && mDrawXGroupBackgroundWhenHighlighted;
+    }
+
+    @Override
+    public int getXGroupFieldCountWhenHighlighted() {
+        return mXGroupFieldCountWhenHighlighted;
+    }
+
+    /**
+     * X 필드의 그룹 갯수 설정
+     * @param groupCount
+     */
+    public void setXGroupFieldCountWhenHighlighted(int groupCount) {
+        if (groupCount > 0) mXGroupFieldCountWhenHighlighted = groupCount;
+    }
+
+    /**
+     * {@link Chart#isHighlightXValueGroupEnabled()} 가 true 일 경우 동작하며, 유저가 highlight 처리시
+     * 해당 x group field 배경 처리 여부 설정
+     * @param enabled
+     * @return
+     */
+    public void setDrawXGroupBackgroundWhenHighlightedEnable(boolean enabled) {
+        mDrawXGroupBackgroundWhenHighlighted = enabled;
     }
 
     /**

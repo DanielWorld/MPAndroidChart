@@ -2,7 +2,6 @@ package com.github.mikephil.charting.listener;
 
 import android.annotation.SuppressLint;
 import android.graphics.Matrix;
-import android.graphics.PointF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -21,7 +20,6 @@ import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -624,7 +622,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
             return false;
         }
 
-        if (mChart.isHighlightXvalueGroup()
+        if (mChart.isHighlightXValueGroupEnabled()
                 && mClosestDataSetToTouch != null) {
             List<Highlight> hList = mChart.getHighlightByXvalue((int) mClosestEntryToTouch.getX(), e.getX(), e.getY());
             performHighlightList(hList, e);

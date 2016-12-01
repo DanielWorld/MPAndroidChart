@@ -86,7 +86,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
 
 
     /**
-     * {@link BarChart#isHighlightXvalueGroup()} true 일 경우, 유저가 highlight 시도시 유사한 x-value 의
+     * {@link BarChart#isHighlightXValueGroupEnabled()} true 일 경우, 유저가 highlight 시도시 유사한 x-value 의
      * 그룹을 전부 highlight 시도한다.
      */
     private boolean mHighlightXvalueGroup;
@@ -517,7 +517,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * 유저가 highlight 시도시 x-value 와 유사한 그룹 전체를 highlight 할 것인지 여부
      * @param enabled
      */
-    public void setHighlightXvalueGroupEnable(boolean enabled) {
+    public void setHighlightXValueGroupEnable(boolean enabled) {
         mHighlightXvalueGroup = enabled;
     }
 
@@ -526,7 +526,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * <p>{@link BarChart#isHighlightPerTapEnabled()} 등 highlight 가 enabled 되어있어야 해요!</p>
      * @return
      */
-    public boolean isHighlightXvalueGroup() {
+    public boolean isHighlightXValueGroupEnabled() {
         return mHighlightXvalueGroup;
     }
 
