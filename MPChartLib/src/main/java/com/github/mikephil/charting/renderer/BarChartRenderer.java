@@ -453,7 +453,12 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
 
             setHighlightDrawPos(high, mBarRect);
 
-            c.drawRect(mBarRect, mHighlightPaint);
+            if (mChart.isDrawBarTopRoundEnabled() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // Daniel (2016-12-01 14:35:20): highlight 부분을 top-round 하게 처리함.
+                c.drawRoundRect(mBarRect, 10f, 10f, mHighlightPaint);
+            } else {
+                c.drawRect(mBarRect, mHighlightPaint);
+            }
         }
     }
 
