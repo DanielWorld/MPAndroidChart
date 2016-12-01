@@ -239,7 +239,8 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         // Daniel (2016-11-29 17:22:41): 위 chart bar 위에 값을 표시하기 위한 최소 공간이 존재해야 한다.
         leftAxis.setSpaceTop(11f);
         // Daniel (2016-11-27 12:34:30): 최소 0.1부터 시작
-        leftAxis.setAxisMinimum(0.1f); // this replaces setStartAtZero(true)
+        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        leftAxis.setGranularity(1.0f);
 
         if (graphType == null || graphType == GraphType.Days)
             leftAxis.setLabelCount(3);
@@ -360,7 +361,7 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
 
         mChart.invalidate();
         // Daniel (2016-11-26 21:21:43): Y 축 방향으로 차트 애니메이션 그리기 설정
-        mChart.animateY(1500);
+        mChart.animateXY(500, 500);
     }
 
     /**
