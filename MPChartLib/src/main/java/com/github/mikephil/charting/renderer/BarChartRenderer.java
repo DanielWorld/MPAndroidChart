@@ -3,6 +3,7 @@ package com.github.mikephil.charting.renderer;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
@@ -368,6 +369,17 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
         }
     }
 
+    private void scale(RectF rect, float scaleX, float scaleY) {
+        float diffHorizontal = (rect.right-rect.left) * (scaleX-1f);
+        float diffVertical = (rect.bottom-rect.top) * (scaleY-1f);
+
+        rect.top -= diffVertical/2f;
+        rect.bottom += diffVertical/2f;
+
+        rect.left -= diffHorizontal/2f;
+        rect.right += diffHorizontal/2f;
+    }
+
     @Override
     public void drawHighlighted(Canvas c, Highlight[] indices) {
         BarData barData = mChart.getBarData();
@@ -397,8 +409,19 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
 
                         float rightArea = xArea * (xGroupCount - (index + 1));  // 7은 x 그룹 수
                         float leftArea = xArea * index;  // 7은 x 그룹 수
-//
-                        c.drawRect(rectF.left + leftArea, rectF.top, rectF.right - rightArea, rectF.bottom, mGridBackgroundPaint);
+
+                        // Scale 및 translation 부분 처리
+                        RectF newRectForTrans = new RectF(
+                                rectF.left + leftArea, rectF.top
+                                , rectF.right - rightArea, rectF.bottom);
+
+//                        scale(newRectForTrans, mViewPortHandler.getScaleX(), mViewPortHandler.getScaleY());
+
+                        // Daniel (2016-12-02 11:00:35): 현재 highlight background 의 scale & translate 부분은
+                        // 아직 해결이 안된 상태이다. TODO: 추후 좋은 방법이 생각나면 처리를 할 것
+                        if (mViewPortHandler.getScaleX() == 1.0f && mViewPortHandler.getScaleY() == 1.0f
+                                && mViewPortHandler.getTransX() == 0.0f && mViewPortHandler.getTransY() == 0.0f)
+                            c.drawRect(newRectForTrans.left, newRectForTrans.top, newRectForTrans.right, newRectForTrans.bottom, mGridBackgroundPaint);
                     }
                 }
             }

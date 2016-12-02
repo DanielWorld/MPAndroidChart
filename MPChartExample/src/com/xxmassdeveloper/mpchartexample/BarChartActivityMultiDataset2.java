@@ -44,7 +44,7 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
     GraphType mCurrentGraphType = GraphType.Days;
 
     private BarChart mChart;
-    private TextView weekBtn, monthBtn;
+    private TextView weekBtn, monthBtn, addDataBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +55,11 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
 
         weekBtn = (TextView) findViewById(R.id.dayBtn);
         monthBtn = (TextView) findViewById(R.id.monthBtn);
+        addDataBtn = (TextView) findViewById(R.id.addDataBtn);
 
         weekBtn.setOnClickListener(this);
         monthBtn.setOnClickListener(this);
+        addDataBtn.setOnClickListener(this);
 
         mChart = (BarChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
@@ -275,7 +277,8 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         // highlight 때 사용하기 위해서는 반드시 설정을 해주세요!
         mChart.setXGroupFieldCountWhenHighlighted(groupCount);
 
-        int startDay = (int) (System.currentTimeMillis() / (1000 * 60 * 60 * 24));
+//        int startDay = (int) (System.currentTimeMillis() / (1000 * 60 * 60 * 24));
+        int startDay = (int) (DateUtil.getMillisFromDate(2015, 2, 27) / (1000 * 60 * 60 * 24));
         int endDay = startDay + groupCount;
 
         ArrayList<BarEntry> yVals1 = new ArrayList<>();
@@ -285,9 +288,9 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         int randomInt = 0;
 
         for (int i = startDay; i < endDay; i++) {
-            randomInt = r.nextInt(25);
+            randomInt = r.nextInt(5);
             yVals1.add(new BarEntry(i, randomInt * 3));
-            randomInt = r.nextInt(25);
+            randomInt = r.nextInt(10);
             yVals2.add(new BarEntry(i, randomInt * 3));
         }
 
@@ -360,7 +363,7 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         mChart.groupBars(startDay, groupSpace, barSpace);
 
         mChart.invalidate();
-        // Daniel (2016-11-26 21:21:43): Y 축 방향으로 차트 애니메이션 그리기 설정
+        // Daniel (2016-11-26 21:21:43): XY축 방향으로 차트 애니메이션 그리기 설정
         mChart.animateXY(500, 500);
     }
 
@@ -391,9 +394,9 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         int randomInt = 0;
 
         for (int i = startMonth; i < endDay; i++) {
-            randomInt = r.nextInt(25);
+            randomInt = r.nextInt(100);
             yVals1.add(new BarEntry(i, randomInt * 3));
-            randomInt = r.nextInt(25);
+            randomInt = r.nextInt(50);
             yVals2.add(new BarEntry(i, randomInt * 3));
         }
 
@@ -467,7 +470,7 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
 
         mChart.invalidate();
         // Daniel (2016-11-26 21:21:43): Y 축 방향으로 차트 애니메이션 그리기 설정
-        mChart.animateY(1500);
+        mChart.animateXY(500, 500);
     }
 
 
