@@ -1,7 +1,13 @@
 package com.github.mikephil.charting.utils;
 
+import android.util.Log;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.utils.date.ChartDateUtil;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * Copyright (C) 2014-2016 daniel@bapul.net
@@ -11,7 +17,6 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 public class MonthAxisValueFormatter implements IAxisValueFormatter {
 	@Override
 	public String getFormattedValue(float value, AxisBase axis) {
-		int month = (int) value % 12;
-		return ((month == 0) ? 12 : month) + "월";
+		return ChartDateUtil.getMonthOfYear(ChartDateUtil.getTimeFromDanielMonthIndex((int) value)) + "월";
 	}
 }
