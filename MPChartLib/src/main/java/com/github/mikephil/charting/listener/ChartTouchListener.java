@@ -101,6 +101,13 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
     }
 
     /**
+     * Sets the last values that was highlighted via touch
+     * @param highlightArray
+     */
+    public void setLastHighlightArray(float[] highlightArray) {
+        mLastHighlightArray = highlightArray;
+    }
+    /**
      * returns the touch mode the listener is currently in
      *
      * @return
