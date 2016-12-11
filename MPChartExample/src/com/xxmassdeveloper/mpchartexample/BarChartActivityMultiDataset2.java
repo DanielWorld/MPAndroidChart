@@ -2,6 +2,7 @@ package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.xxmassdeveloper.mpchartexample.custom.DayAxisValueFormatter2;
@@ -362,6 +364,15 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         mChart.getXAxis().setAxisMaximum(startDay + mChart.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
         mChart.groupBars(startDay, groupSpace, barSpace);
 
+        // HIGHLIGHT 초기화 부분 처리
+        // Highlight 위에 그려지는 value 초기화
+        mChart.setHighlightOnlyDrawValueIndex(-1, -1);
+        // 차트 touch 시 마지막 Highlight 부분 초기화
+        mChart.getOnTouchListener().setLastHighlighted(null);
+        mChart.getOnTouchListener().setLastHighlightArray(null);
+        // Daniel (2016-12-11 23:19:48): Highlight 초기화
+        mChart.highlightValues(null);
+
         mChart.invalidate();
         // Daniel (2016-11-26 21:21:43): XY축 방향으로 차트 애니메이션 그리기 설정
         mChart.animateXY(500, 500);
@@ -467,6 +478,15 @@ public class BarChartActivityMultiDataset2 extends DemoBase implements
         // barData.getGroupWith(...) is a helper that calculates the width each group needs based on the provided parameters
         mChart.getXAxis().setAxisMaximum(startMonth + mChart.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
         mChart.groupBars(startMonth, groupSpace, barSpace);
+
+        // HIGHLIGHT 초기화 부분 처리
+        // Highlight 위에 그려지는 value 초기화
+        mChart.setHighlightOnlyDrawValueIndex(-1, -1);
+        // 차트 touch 시 마지막 Highlight 부분 초기화
+        mChart.getOnTouchListener().setLastHighlighted(null);
+        mChart.getOnTouchListener().setLastHighlightArray(null);
+        // Daniel (2016-12-11 23:19:48): Highlight 초기화
+        mChart.highlightValues(null);
 
         mChart.invalidate();
         // Daniel (2016-11-26 21:21:43): Y 축 방향으로 차트 애니메이션 그리기 설정
