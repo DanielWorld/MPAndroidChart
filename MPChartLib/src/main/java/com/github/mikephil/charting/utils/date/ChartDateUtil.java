@@ -36,11 +36,27 @@ public class ChartDateUtil {
 	}
 
 	/**
+	 * yyyy 년 MM 월 dd 일 hh 시간 mm 분 ss 초를  milliseconds 로 바꿔줌
+	 * @param year
+	 * @param month
+	 * @param day
+	 * @param hour
+	 * @param minute
+     * @return
+     */
+	public static long getMillisFromDate(int year, int month, int day, int hour, int minute, int second) {
+		Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
+		calendar.set(year, month - 1, day, hour, minute, second);
+		return calendar.getTimeInMillis();
+	}
+
+	/**
 	 * yyyy 년 MM 월 을 milliseconds 로 바꿔줌
 	 * @param year
 	 * @param month
 	 * @return
 	 */
+	@Deprecated
 	public static long getMillisFromDate(int year, int month) {
 		// Daniel (2016-12-02 12:08:44): Month 의 경우 Month = 0가 1월이다.
 		Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
