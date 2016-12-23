@@ -211,4 +211,27 @@ public class ChartDateUtil {
 
 		return ChartDateUtil.getMillisFromDate(standardYear + getYear, getMonth + 1);
 	}
+
+	/**
+	 * 해당 milliseconds 로 day index 를 만든다.
+	 * <p>milliseconds 를 yyyy-MM-dd 23:59:59 형태로 만든 뒤 (1000 * 60 * 60 * 24) 로 나눈다.</p>
+	 * @param milliseconds
+	 * @return
+     */
+	public static int getDanielDayIndex(long milliseconds) {
+		int year = getYear(milliseconds);
+		int month = getMonthOfYear(milliseconds);
+		int day = getDayOfMonth(milliseconds);
+
+		return (int) (getMillisFromDate(year, month, day, 23, 59, 59) / (1000 * 60 * 60 * 24));
+	}
+
+	/**
+	 * {@link ChartDateUtil#getDanielDayIndex(long)} 를 통해서 만든 index 를 milliseconds 로 반환
+	 * @param dayIndex
+	 * @return
+     */
+	public static long getTimeFromDanielDayIndex(int dayIndex) {
+		return (long) dayIndex * (1000 * 60 * 60 * 24);
+	}
 }
